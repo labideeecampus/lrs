@@ -35,15 +35,27 @@ app.use(function(req, res, next) {
     res.setHeader('X-Experience-API-Version', '1.0.2');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Content-Length,Authorization,If-Match,If-None-Match,X-Experience-API-Version, Accept-Language');
     res.setHeader('Access-Control-Expose-Headers', 'ETag,Last-Modified,Cache-Control,Content-Type,Content-Length,WWW-Authenticate,X-Experience-API-Version, Accept-Language');
-    if (!user || user.name !== phantom_db[0].name || user.pass !== phantom_db[0].pass) {
+    if (!user) {
         res.statusCode = 401
         res.setHeader('WWW-Authenticate', 'Basic realm="ADLLRS"');
         res.setHeader('Content-Type', 'text/html; charset=utf-8');
-        res.end('Access denied')
+        res.end('Access denied');
     } else {
-        res.setHeader('Strict-Transport-Security', 'max-age=31536000');
-        //res.setHeader('Content-Encoding', 'gzip');
-        next()
+        var credentials = false;
+        for(var i=0;i<phantom_db.length;i++){
+            if(user.name === phantom_db[i].name && user.pass === phantom_db[i].pass)
+                credentials = true;
+        }
+        if(credentials){
+            res.setHeader('Strict-Transport-Security', 'max-age=31536000');
+            next()
+        }
+        else{
+            res.statusCode = 401
+            res.setHeader('WWW-Authenticate', 'Basic realm="ADLLRS"');
+            res.setHeader('Content-Type', 'text/html; charset=utf-8');
+            res.end('Access denied')
+        }
     }
 });
 app.use('/', routes);
@@ -78,12 +90,5 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-
-/*var ipaddress = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
-var port = process.env.OPENSHIFT_NODEJS_PORT || 3000;
-
-http.createServer(app).listen(port,ipaddress, function(){
-    console.log('Express server listening on ' + ipaddress + ' port ' + port);
-});*/
 
 module.exports = app;

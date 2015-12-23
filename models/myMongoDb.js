@@ -12,8 +12,8 @@ var response = require("./response");
  MongoDB 2.4 database added.  Please make note of these credentials:
 
    Root User:     admin
-   Root Password: HbWzrLShlkKc
-   Database Name: marketingplansystem
+   Root Password: GTHMzZ_43ve3
+   Database Name: lrs
 
 Connection URL: mongodb://$OPENSHIFT_MONGODB_DB_HOST:$OPENSHIFT_MONGODB_DB_PORT/
  */
@@ -68,8 +68,10 @@ var statementSchema = new Schema(
         id:String,
         object:Object,
         timestamp:Date,
+        stored:Date,
         verb:Object,
-        result:Object
+        result:Object,
+        version:String
     }
 );
 
@@ -81,6 +83,8 @@ exports.getStatements = function(query){
     return Statement.find(query).exec();
 }
 exports.postStatements = function(query){
+    query.version = "1.0.1";
+    query.stored = new Date();
     return Statement.create(query);
 }
 exports.putStatement = function(par,query){
