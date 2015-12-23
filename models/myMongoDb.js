@@ -18,7 +18,7 @@ var response = require("./response");
 Connection URL: mongodb://$OPENSHIFT_MONGODB_DB_HOST:$OPENSHIFT_MONGODB_DB_PORT/
  */
 
-var db_name = "ecampus_lrs"
+var db_name = "lrs"
 //provide a sensible default for local development
 mongodb_connection_string = 'mongodb://127.0.0.1:27017/' + db_name;
 var options = {
@@ -28,7 +28,7 @@ if(process.env.OPENSHIFT_MONGODB_DB_URL){
     mongodb_connection_string = process.env.OPENSHIFT_MONGODB_DB_URL + db_name;
     options = {
         user: 'admin',
-        pass: 'HbWzrLShlkKc'
+        pass: 'GTHMzZ_43ve3'
     }
 }
 mongoose.connect(mongodb_connection_string,options);
