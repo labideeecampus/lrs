@@ -79,5 +79,11 @@ app.use(function(err, req, res, next) {
   });
 });
 
+/*var ipaddress = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
+var port = process.env.OPENSHIFT_NODEJS_PORT || 3000;
+
+http.createServer(app).listen(port,ipaddress, function(){
+    console.log('Express server listening on ' + ipaddress + ' port ' + port);
+});*/
 
 module.exports = app;
