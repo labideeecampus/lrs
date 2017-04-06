@@ -12,7 +12,7 @@ var response = require("./response");
  MongoDB 2.4 database added.  Please make note of these credentials:
 
    Root User:     admin
-   Root Password: GTHMzZ_43ve3
+   Root Password: GTHMzZ_43ve3 
    Database Name: lrs
 
 Connection URL: mongodb://$OPENSHIFT_MONGODB_DB_HOST:$OPENSHIFT_MONGODB_DB_PORT/
@@ -21,8 +21,9 @@ Connection URL: mongodb://$OPENSHIFT_MONGODB_DB_HOST:$OPENSHIFT_MONGODB_DB_PORT/
 var db_name = "lrs"
 //provide a sensible default for local development
 mongodb_connection_string = 'mongodb://127.0.0.1:27017/' + db_name;
-var options = {
-}
+var options 
+//  = { user: 'admin', pass: 'GTHMzZ_43ve3' }
+
 //take advantage of openshift env vars when available:
 if(process.env.OPENSHIFT_MONGODB_DB_URL){
     mongodb_connection_string = process.env.OPENSHIFT_MONGODB_DB_URL + db_name;
@@ -51,7 +52,13 @@ stateSchema.index({ activitiId: 1 }); // schema level
 var State = mongoose.model('State', stateSchema);
 
 exports.getState = function(query){
+    // console.log(query)
     return State.find(query).exec();
+}
+// max 
+exports.aggregate = function(query){
+    // console.log(query)
+    return State.aggregate(query).exec();
 }
 exports.postState = function(query){
     return State.create(query);

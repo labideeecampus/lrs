@@ -46,6 +46,38 @@ router.get('/xAPI/activities/state', function(req, res) {
         }
     );
 });
+
+// max
+// ritorna per un tente di una scuola lo stato del corso e degli sco relativi
+// { "$and": 
+//    [{"agent.account.name": "cape2014"}, {"agent.account.homePage": "http://127.0.0.1:3000"},
+//    {"activitiId" : /http:\/\/127.0.0.1:3000\/0007/}
+//    ]}
+router.get('/xAPI/activities/state/monitoring', function(req, res) {
+// ritorna tutti i corsi monitorati da LRS  equivale ad una distinct  
+// var query =  [ {"$match" : {"stateId" : "course"}}, {"$group" : {"_id" : {activitiId:"$activitiId"}}}] 
+var query =  { $query: { $and: [ { "agent.account.name": "cape2014" }, { "agent.account.homePage": "http://127.0.0.1:3000" } , {"stateId" : /course|sco/} ]}, $orderby: { "activitiId" : 1 }}
+    query.$query.$and[0]["agent.account.name"] = decodeURIComponent(req.query.name)
+    query.$query.$and[1]["agent.account.homePage"] = decodeURIComponent(req.query.homePage)
+console.log(query.$query.$and[0]["agent.account.name"], query.$query.$and[1]["agent.account.homePage"])
+console.log(JSON.stringify(query))
+    var promise = myMongoDb.getState(query);
+    promise.then(
+        function (states) {
+            var objRes = typeof states === 'object' && states.length > 0 ? {status:200,message:states,contentType:'application/json'} : {status:404,message:"State not found",contentType:'text/html;charset=utf-8'};
+            mdlResponse.send(req,res,objRes);
+        },
+        function(err){
+            var objErr = {
+                status:500,
+               message:err,
+               contentType:'application/json'
+           };
+           mdlError.send(req,res,objErr);
+       }
+    );
+});    
+
 router.post('/xAPI/activities/state', function(req, res) {
     var activityId = decodeURIComponent(req.query.activityId);
     try{
