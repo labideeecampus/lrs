@@ -32,6 +32,14 @@ if(process.env.OPENSHIFT_MONGODB_DB_URL){
         pass: 'GTHMzZ_43ve3'
     }
 }
+if (process.env.MONGODB_DB_URL) {
+    mongodb_connection_string = "mongodb://userHYH:GTHMzZ_43ve3@mongodb/lrs"
+    console.log(MONGODB_DB_URL);
+    options = {
+        user: 'userHYH',
+        pass: 'GTHMzZ_43ve3'
+    }
+}
 mongoose.connect(mongodb_connection_string,options);
 
 var Schema = mongoose.Schema;
