@@ -18,26 +18,49 @@ var response = require("./response");
 Connection URL: mongodb://$OPENSHIFT_MONGODB_DB_HOST:$OPENSHIFT_MONGODB_DB_PORT/
  */
 
-var db_name = "lrs"
+
+var db_name = "lrs";
+/* OPENSHIFT CONSOLE V2  */
 //provide a sensible default for local development
-mongodb_connection_string = 'mongodb://127.0.0.1:27017/' + db_name;
-var options 
+//mongodb_connection_string = 'mongodb://127.0.0.1:27017/' + db_name;
+//var options 
 //  = { user: 'admin', pass: 'GTHMzZ_43ve3' }
 
 //take advantage of openshift env vars when available:
-if(process.env.OPENSHIFT_MONGODB_DB_URL){
-    mongodb_connection_string = process.env.OPENSHIFT_MONGODB_DB_URL + db_name;
-    options = {
-        user: 'admin',
-        pass: 'GTHMzZ_43ve3'
+//if(process.env.OPENSHIFT_MONGODB_DB_URL){
+//    mongodb_connection_string = process.env.OPENSHIFT_MONGODB_DB_URL + db_name;
+//    options = {
+//        user: 'admin',
+//        pass: 'GTHMzZ_43ve3'
+//    }
+//}
+
+/* OPENSHIFT CONSOLE V3  */
+var mongoURL = process.env.OPENSHIFT_MONGODB_DB_URL || process.env.MONGO_URL;
+var mongoURLLabel = "";
+
+if (mongoURL == null && process.env.DATABASE_SERVICE_NAME) {
+  var mongoServiceName = process.env.DATABASE_SERVICE_NAME.toUpperCase(),
+      mongoHost = process.env[mongoServiceName + '_SERVICE_HOST'],
+      mongoPort = process.env[mongoServiceName + '_SERVICE_PORT'],
+      mongoDatabase = process.env[mongoServiceName + '_DATABASE'],
+      mongoPassword = process.env[mongoServiceName + '_PASSWORD']
+      mongoUser = process.env[mongoServiceName + '_USER'];
+
+  if (mongoHost && mongoPort && mongoDatabase) {
+    mongoURLLabel = mongoURL = 'mongodb://';
+    if (mongoUser && mongoPassword) {
+      mongoURL += mongoUser + ':' + mongoPassword + '@';
     }
+    // Provide UI label that excludes user id and pw
+    mongoURLLabel += mongoHost + ':' + mongoPort + '/' + mongoDatabase;
+    mongoURL += mongoHost + ':' +  mongoPort + '/' + mongoDatabase;
+
+  }
 }
-mongodb_connection_string = "mongodb://userHYH:GTHMzZ_43ve3@mongodb/lrs"
-console.log(MONGODB_DB_URL);
-options = {
-    user: 'userHYH',
-    pass: 'GTHMzZ_43ve3'
-}
+
+mongodb_connection_string = mongoURL;
+
 mongoose.connect(mongodb_connection_string,options);
 
 var Schema = mongoose.Schema;
