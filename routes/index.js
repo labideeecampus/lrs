@@ -1,5 +1,5 @@
 var express = require('express');
-var myMongoDb = require('./../models/myMongoDb.js');
+//var myMongoDb = require('./../models/myMongoDb.js');
 var mdlError = require('./../models/error.js');
 var mdlResponse = require('./../models/response.js');
 var router = express.Router();
@@ -8,7 +8,7 @@ var router = express.Router();
 router.get('/', function(req, res, next) {
     res.render('index', { title: 'Express' });
 });
-router.get('/xAPI/activities/state', function(req, res) {
+/*router.get('/xAPI/activities/state', function(req, res) {
     var activityId = decodeURIComponent(req.query.activityId);
     try{
         var agent = JSON.parse(decodeURIComponent(req.query.agent));
@@ -187,5 +187,5 @@ router.post('/xAPI/statements', function(req, res) {
         return mdlError.send(req,res,objErr);
     });
 });
-
+*/
 module.exports = router;
