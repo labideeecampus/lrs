@@ -36,7 +36,7 @@ var db_name = "lrs";
 //}
 
 /* OPENSHIFT CONSOLE V3  */
-var mongoURL = process.env.OPENSHIFT_MONGODB_DB_URL || process.env.MONGO_URL;
+/*var mongoURL = process.env.OPENSHIFT_MONGODB_DB_URL || process.env.MONGO_URL;
 var mongoURLLabel = "";
 
 if (mongoURL == null && process.env.DATABASE_SERVICE_NAME) {
@@ -58,9 +58,9 @@ if (mongoURL == null && process.env.DATABASE_SERVICE_NAME) {
 
   }
 }
-
-mongodb_connection_string = mongoURL;
-
+*/
+mongodb_connection_string = 'mongodb://admin:GTHMzZ_43ve3@mongodb/lrs';
+var options = {};
 mongoose.connect(mongodb_connection_string,options);
 
 var Schema = mongoose.Schema;
