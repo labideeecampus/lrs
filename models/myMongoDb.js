@@ -59,7 +59,7 @@ if (mongoURL == null && process.env.DATABASE_SERVICE_NAME) {
   }
 }
 */
-mongodb_connection_string = 'mongodb://admin:GTHMzZ_43ve3@mongodb/lrs';
+mongodb_connection_string = 'mongodb://userdb:GTHMzZ_43ve3@mongodb/lrs';
 var options = {};
 mongoose.connect(mongodb_connection_string,options);
 
